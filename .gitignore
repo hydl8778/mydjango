@@ -1,0 +1,25 @@
+# Python-generated files
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Django
+*.sqlite3
+db.sqlite3
+/media/
+/staticfiles/
+
+# 环境
+.env
+.python-version
+
+# OS
+.DS_Store
+Thumbs.db
