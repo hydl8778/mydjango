@@ -22,6 +22,7 @@ class CartList(models.Model):
     check_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="年检费")
     insurance_start = models.DateField(null=True, blank=True, verbose_name="保险开始日期")
     insurance_end = models.DateField(null=True, blank=True, verbose_name="保险结束日期")
+    img  = models.ImageField(null=True, blank=True, verbose_name="车辆图片")
 
     class Meta:
         db_table = 'cart_list'
