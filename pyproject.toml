@@ -18,6 +18,7 @@ dependencies = [
     "dj-database-url>=3.1.2",
     "django-environ>=0.14.0",
     "cryptography>=50.0.2",
+    "gunicorn>=26.2.0",
 ]
 
 [project.scripts]
