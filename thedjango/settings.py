@@ -11,20 +11,24 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+import environ
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+env = environ.Env()
+environ.Env.read_env(BASE_DIR/'.env')
+SECRET_KEY = env('SECRET_KEY')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!2e#pw@)dmf=uu3p1u9$bfhuchlo^^w(8hk#gm8*amo-$%akiy'
+# SECRET_KEY = 'django-insecure-!2e#pw@)dmf=uu3p1u9$bfhuchlo^^w(8hk#gm8*amo-$%akiy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -78,15 +82,22 @@ WSGI_APPLICATION = 'thedjango.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME':  'thedjango',
+#         'USER': 'root',
+#         'PASSWORD': 'key@1234',
+#         'HOST': 'localhost',
+#         'PORT': 3306,
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME':  'thedjango',
-        'USER': 'root',
-        'PASSWORD': 'key@1234',
-        'HOST': 'localhost',
-        'PORT': 3306,
-    }
+    'default': dj_database_url.config(
+        default=env('DATABASE_URL'),
+        conn_max_age=600,
+    )
 }
 
 
@@ -114,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -132,12 +143,12 @@ STATIC_ROOT = BASE_DIR/'static'
 
 MAILERS = {
     'default': {
-        'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
-        'HOST': 'smtp.qq.com',
-        'PORT': 465,
-        'USER': '你的邮箱@qq.com',
-        'PASSWORD': '授权码',
-        'USE_TLS': True,  # 一般 465 端口用 SSL，587 端口用 TLS
+        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+        # 'HOST': 'smtp.qq.com',
+        # 'PORT': 465,
+        # 'USER': '你的邮箱@qq.com',
+        # 'PASSWORD': '授权码',
+        # 'USE_TLS': True,  # 一般 465 端口用 SSL，587 端口用 TLS
     },
 }
 
