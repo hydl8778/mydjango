@@ -2,10 +2,11 @@ from django.shortcuts import render
 from datetime import date
 from collections import defaultdict
 
-from rest_framework import response
+from rest_framework import response, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from djangoapp.serializers import OilFeeSerializer
 
 from djangoapp.models import CartList, KmList, OilFee, EtcFee, ElectricFee, WashFee, InsuranceFee
 
@@ -35,7 +36,8 @@ class GetAllCartData(APIView):
         # 3.构建行数据
         rows = []
         for cart in cart_list:
-            row = {"plate_number": cart.plate_number,
+            row = {
+                    "plate_number": cart.plate_number,
                     "oil_card": cart.oil_card,
                     "etc_card": cart.etc_card,
                     "admin": cart.admin,
@@ -49,7 +51,8 @@ class GetAllCartData(APIView):
                     "check_fee": cart.check_fee,
                     "insurance_start": cart.insurance_start,
                     "insurance_end": cart.insurance_end,
-                    "img": cart.img.url if cart.img else None,
+                     # 判断有没有图，有就取 URL，没有就返回 None
+                    "img": request.build_absolute_uri(cart.img.url) if cart.img else None,
                     }
             for m in range(1, 13):
                 row[f"km_{m}"] = km_map.get((cart.id, m), 0)
@@ -69,3 +72,8 @@ class GetAllCartData(APIView):
                 "year": year,
                 "rows": rows,
         })
+
+class GetOil(viewsets.ModelViewSet):
+    queryset = OilFee.objects.all()
+    serializer_class = OilFeeSerializer
+
